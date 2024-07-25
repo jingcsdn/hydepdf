@@ -1,6 +1,6 @@
-# gopdf
+# hpdf
 
-gopdf is a simple library for generating PDF document written in Go lang.
+hpdf is a simple library for generating PDF document written in Go lang.
 
 A minimum version of Go 1.13 is required.
 
@@ -16,7 +16,7 @@ A minimum version of Go 1.13 is required.
 ## Installation
 
 ```
-go get -u github.com/signintech/gopdf
+go get -u github.com/signintech/hpdf
 ```
 
 ### Print text
@@ -26,13 +26,13 @@ go get -u github.com/signintech/gopdf
 package main
 import (
 	"log"
-	"github.com/signintech/gopdf"
+	"github.com/signintech/hpdf"
 )
 
 func main() {
 
-	pdf := gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{ PageSize: *gopdf.PageSizeA4 })
+	pdf := hpdf.HPdf{}
+	pdf.Start(hpdf.Config{ PageSize: *hpdf.PageSizeA4 })
 	pdf.AddPage()
 	err := pdf.AddTTFFont("wts11", "../ttf/wts11.ttf")
 	if err != nil {
@@ -73,12 +73,12 @@ pdf.Cell(nil, "Hello")
 package main
 import (
 	"log"
-	"github.com/signintech/gopdf"
+	"github.com/signintech/hpdf"
 )
 
 func main() {
-	pdf := gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4 })
+	pdf := hpdf.HPdf{}
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4 })
 	pdf.AddPage()
 	var err error
 	err = pdf.AddTTFFont("loma", "../ttf/Loma.ttf")
@@ -108,12 +108,12 @@ package main
 
 import (
 	"log"
-	"github.com/signintech/gopdf"
+	"github.com/signintech/hpdf"
 )
 
 func main()  {
-	pdf := gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{ PageSize: *gopdf.PageSizeA4 })
+	pdf := hpdf.HPdf{}
+	pdf.Start(hpdf.Config{ PageSize: *hpdf.PageSizeA4 })
 	pdf.AddPage()
 	err := pdf.AddTTFFont("times", "./test/res/times.ttf")
 	if err != nil {
@@ -153,12 +153,12 @@ package main
 
 import (
     "log"
-    "github.com/signintech/gopdf"
+    "github.com/signintech/hpdf"
 )
 
 func main() {
-    pdf := gopdf.GoPdf{}
-    pdf.Start(gopdf.Config{ PageSize: *gopdf.PageSizeA4 })
+    pdf := hpdf.HPdf{}
+    pdf.Start(hpdf.Config{ PageSize: *hpdf.PageSizeA4 })
 
     err := pdf.AddTTFFont("LiberationSerif-Regular", "./test/res/LiberationSerif-Regular.ttf")
     if err != nil {
@@ -215,7 +215,7 @@ pdf.Oval(100, 200, 500, 500)
 pdf.SetStrokeColor(255, 0, 0)
 pdf.SetLineWidth(2)
 pdf.SetFillColor(0, 255, 0)
-pdf.Polygon([]gopdf.Point{{X: 10, Y: 30}, {X: 585, Y: 200}, {X: 585, Y: 250}}, "DF")
+pdf.Polygon([]hpdf.Point{{X: 10, Y: 30}, {X: 585, Y: 200}, {X: 585, Y: 250}}, "DF")
 ```
 
 ### Draw rectangle with round corner
@@ -274,18 +274,18 @@ package main
 import (
 	"log"
 
-	"github.com/signintech/gopdf"
+	"github.com/signintech/hpdf"
 )
 
 
 func main() {
 
-	pdf := gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{
-		PageSize: *gopdf.PageSizeA4,
-		Protection: gopdf.PDFProtectionConfig{
+	pdf := hpdf.HPdf{}
+	pdf.Start(hpdf.Config{
+		PageSize: *hpdf.PageSizeA4,
+		Protection: hpdf.PDFProtectionConfig{
 			UseProtection: true,
-			Permissions: gopdf.PermissionsPrint | gopdf.PermissionsCopy | gopdf.PermissionsModify,
+			Permissions: hpdf.PermissionsPrint | hpdf.PermissionsCopy | hpdf.PermissionsModify,
 			OwnerPass:   []byte("123456"),
 			UserPass:    []byte("123456789")},
 	})
@@ -306,7 +306,7 @@ Import existing PDF power by package [gofpdi](https://github.com/phpdave11/gofpd
 package main
 
 import (
-        "github.com/signintech/gopdf"
+        "github.com/signintech/hpdf"
         "io"
         "net/http"
         "os"
@@ -327,8 +327,8 @@ func main() {
             panic(err)
         }
 
-        pdf := gopdf.GoPdf{}
-        pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+        pdf := hpdf.HPdf{}
+        pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 
         pdf.AddPage()
 
@@ -393,24 +393,24 @@ package main
 import (
 	"log"
 
-	"github.com/signintech/gopdf"
+	"github.com/signintech/hpdf"
 )
 
 func main() {
 
-    pdf := gopdf.GoPdf{}
+    pdf := hpdf.HPdf{}
     mm6ToPx := 22.68
 
     // Base trim-box
-    pdf.Start(gopdf.Config{
-        PageSize: *gopdf.PageSizeA4,
-        TrimBox: gopdf.Box{Left: mm6ToPx, Top: mm6ToPx, Right: gopdf.PageSizeA4.W - mm6ToPx, Bottom: gopdf.PageSizeA4.H - mm6ToPx},
+    pdf.Start(hpdf.Config{
+        PageSize: *hpdf.PageSizeA4,
+        TrimBox: hpdf.Box{Left: mm6ToPx, Top: mm6ToPx, Right: hpdf.PageSizeA4.W - mm6ToPx, Bottom: hpdf.PageSizeA4.H - mm6ToPx},
     })
 
     // Page trim-box
-    opt := gopdf.PageOption{
-        PageSize: *gopdf.PageSizeA4,
-        TrimBox: &gopdf.Box{Left: mm6ToPx, Top: mm6ToPx, Right: gopdf.PageSizeA4.W - mm6ToPx, Bottom: gopdf.PageSizeA4.H - mm6ToPx},
+    opt := hpdf.PageOption{
+        PageSize: *hpdf.PageSizeA4,
+        TrimBox: &hpdf.Box{Left: mm6ToPx, Top: mm6ToPx, Right: hpdf.PageSizeA4.W - mm6ToPx, Bottom: hpdf.PageSizeA4.H - mm6ToPx},
     }
     pdf.AddPageWithOption(opt)
 
@@ -446,7 +446,7 @@ You can use **func PlaceHolderText** to create the point where you want "total n
 
 ```go
 func main(){
-    	pdf := GoPdf{}
+    	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4})
 	pdf.AddTTFFont("LiberationSerif-Regular", "LiberationSerif-Regular.ttf")
 	pdf.SetFont("LiberationSerif-Regular", "", 14) }
@@ -474,4 +474,4 @@ func main(){
 }
 ```
 
-visit https://github.com/oneplus1000/gopdfsample for more samples.
+visit https://github.com/oneplus1000/hpdfsample for more samples.

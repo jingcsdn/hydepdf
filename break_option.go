@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 // BreakMode type for text break modes.
 type BreakMode int

@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ type TransparencyXObjectGroup struct {
 	ExtGStateIndexes []int
 	XObjects         []cacheContentImage
 
-	getRoot       func() *GoPdf
+	getRoot       func() *HPdf
 	pdfProtection *PDFProtection
 }
 
@@ -23,7 +23,7 @@ type TransparencyXObjectGroupOptions struct {
 	XObjects         []cacheContentImage
 }
 
-func GetCachedTransparencyXObjectGroup(opts TransparencyXObjectGroupOptions, gp *GoPdf) (TransparencyXObjectGroup, error) {
+func GetCachedTransparencyXObjectGroup(opts TransparencyXObjectGroupOptions, gp *HPdf) (TransparencyXObjectGroup, error) {
 	group := TransparencyXObjectGroup{
 		BBox:             opts.BBox,
 		XObjects:         opts.XObjects,
@@ -31,14 +31,14 @@ func GetCachedTransparencyXObjectGroup(opts TransparencyXObjectGroupOptions, gp 
 		ExtGStateIndexes: opts.ExtGStateIndexes,
 	}
 	group.Index = gp.addObj(group)
-	group.init(func() *GoPdf {
+	group.init(func() *HPdf {
 		return gp
 	})
 
 	return group, nil
 }
 
-func (s TransparencyXObjectGroup) init(funcGetRoot func() *GoPdf) {
+func (s TransparencyXObjectGroup) init(funcGetRoot func() *HPdf) {
 	s.getRoot = funcGetRoot
 }
 

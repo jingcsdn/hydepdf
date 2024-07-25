@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"io"
@@ -9,7 +9,7 @@ type ImportedObj struct { //impl IObj
 	Data string
 }
 
-func (c *ImportedObj) init(funcGetRoot func() *GoPdf) {
+func (c *ImportedObj) init(funcGetRoot func() *HPdf) {
 
 }
 

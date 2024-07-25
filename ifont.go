@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 // IFont represents a font interface.
 type IFont interface {

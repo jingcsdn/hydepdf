@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/signintech/gopdf"
+	"github.com/signintech/hpdf"
 )
 
-func GetFont(pdf *gopdf.GoPdf, fontPath string) (err error) {
+func GetFont(pdf *hpdf.HPdf, fontPath string) (err error) {
 	b, err := os.Open(fontPath)
 	if err != nil {
 		return err
@@ -25,8 +25,8 @@ func GetFont(pdf *gopdf.GoPdf, fontPath string) (err error) {
 
 func TestSetY(t *testing.T) {
 	var err error
-	pdf := &gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf := &hpdf.HPdf{}
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	err = GetFont(pdf, "../res/LiberationSerif-Regular.ttf")
 	if err != nil {
 		log.Fatalln(err)
@@ -59,8 +59,8 @@ func TestSetY(t *testing.T) {
 
 func TestSetNewY(t *testing.T) {
 	var err error
-	pdf := &gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf := &hpdf.HPdf{}
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	err = GetFont(pdf, "../res/LiberationSerif-Regular.ttf")
 	if err != nil {
 		log.Fatalln(err)
@@ -95,8 +95,8 @@ func TestSetNewY(t *testing.T) {
 
 func TestSetNewXY(t *testing.T) {
 	var err error
-	pdf := &gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf := &hpdf.HPdf{}
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	err = GetFont(pdf, "../res/LiberationSerif-Regular.ttf")
 	if err != nil {
 		log.Fatalln(err)
@@ -131,8 +131,8 @@ func TestSetNewXY(t *testing.T) {
 
 func TestSetNewYX(t *testing.T) {
 	var err error
-	pdf := &gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf := &hpdf.HPdf{}
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	err = GetFont(pdf, "../res/LiberationSerif-Regular.ttf")
 	if err != nil {
 		log.Fatalln(err)
@@ -167,8 +167,8 @@ func TestSetNewYX(t *testing.T) {
 
 func TestSetNewYCheckHeight(t *testing.T) {
 	var err error
-	pdf := &gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf := &hpdf.HPdf{}
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	err = GetFont(pdf, "../res/LiberationSerif-Regular.ttf")
 	if err != nil {
 		log.Fatalln(err)
@@ -195,8 +195,8 @@ func TestSetNewYCheckHeight(t *testing.T) {
 
 func TestLineBreak(t *testing.T) {
 	var err error
-	pdf := &gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf := &hpdf.HPdf{}
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	err = GetFont(pdf, "../res/LiberationSerif-Regular.ttf")
 	if err != nil {
 		log.Fatalln(err)
@@ -210,22 +210,22 @@ func TestLineBreak(t *testing.T) {
 
 	w := 500.0
 
-	var breakOptionTests = []*gopdf.BreakOption{
-		&gopdf.DefaultBreakOption,
+	var breakOptionTests = []*hpdf.BreakOption{
+		&hpdf.DefaultBreakOption,
 		{
-			Mode:           gopdf.BreakModeIndicatorSensitive,
+			Mode:           hpdf.BreakModeIndicatorSensitive,
 			BreakIndicator: ' ',
 		},
 	}
 
-	y := (gopdf.PageSizeA4.H/2 + 100.0*float64(len(breakOptionTests))) / 2
+	y := (hpdf.PageSizeA4.H/2 + 100.0*float64(len(breakOptionTests))) / 2
 	linebreakText := strings.Repeat("MultiCell* methods don't respect linebreaking rules.", 2)
 	for i, opt := range breakOptionTests {
-		pdf.SetXY(gopdf.PageSizeA4.W/2-w/2, y+100.0*float64(i))
-		err = pdf.MultiCellWithOption(&gopdf.Rect{
+		pdf.SetXY(hpdf.PageSizeA4.W/2-w/2, y+100.0*float64(i))
+		err = pdf.MultiCellWithOption(&hpdf.Rect{
 			W: w,
 			H: 1000,
-		}, linebreakText, gopdf.CellOption{
+		}, linebreakText, hpdf.CellOption{
 			BreakOption: opt,
 		})
 		if err != nil {

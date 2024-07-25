@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"io"
@@ -6,7 +6,7 @@ import (
 
 // IObj inteface for all pdf object
 type IObj interface {
-	init(func() *GoPdf)
+	init(func() *HPdf)
 	getType() string
 	write(w io.Writer, objID int) error
 }

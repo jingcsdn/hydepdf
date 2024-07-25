@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -11,10 +11,10 @@ type EmbedFontObj struct {
 	Data      string
 	zfontpath string
 	font      IFont
-	getRoot   func() *GoPdf
+	getRoot   func() *HPdf
 }
 
-func (e *EmbedFontObj) init(funcGetRoot func() *GoPdf) {
+func (e *EmbedFontObj) init(funcGetRoot func() *HPdf) {
 	e.getRoot = funcGetRoot
 }
 

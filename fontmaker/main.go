@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/signintech/gopdf/fontmaker/core"
+	"github.com/signintech/hpdf/fontmaker/core"
 	//"runtime/debug"
 )
 
@@ -41,11 +41,11 @@ func main() {
 
 func echoUsage() {
 	var buff bytes.Buffer
-	buff.WriteString("fontmaker is tool for making font file to use with gopdf.\n")
+	buff.WriteString("fontmaker is tool for making font file to use with hpdf.\n")
 	buff.WriteString("\nUsage:\n")
 	buff.WriteString("\tfontmaker encoding map_folder font_file output_folder\n")
 	buff.WriteString("\nExample:\n")
-	buff.WriteString("\tfontmaker cp874 /gopath/github.com/signintech/gopdf/fontmaker/map  ../ttf/Loma.ttf ./tmp\n")
+	buff.WriteString("\tfontmaker cp874 /gopath/github.com/signintech/hpdf/fontmaker/map  ../ttf/Loma.ttf ./tmp\n")
 	buff.WriteString("\n")
 	fmt.Print(buff.String())
 }

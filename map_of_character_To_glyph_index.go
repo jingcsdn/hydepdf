@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 // MapOfCharacterToGlyphIndex map of CharacterToGlyphIndex
 type MapOfCharacterToGlyphIndex struct {

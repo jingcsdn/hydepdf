@@ -1,11 +1,11 @@
-package gopdf
+package hpdf
 
 import (
 	"errors"
 	"fmt"
 	"io"
 
-	"github.com/signintech/gopdf/fontmaker/core"
+	"github.com/signintech/hpdf/fontmaker/core"
 )
 
 // ErrCharNotFound char not found
@@ -24,10 +24,10 @@ type SubsetFontObj struct {
 	indexObjUnicodeMap    int
 	ttfFontOption         TtfOption
 	funcKernOverride      FuncKernOverride
-	funcGetRoot           func() *GoPdf
+	funcGetRoot           func() *HPdf
 }
 
-func (s *SubsetFontObj) init(funcGetRoot func() *GoPdf) {
+func (s *SubsetFontObj) init(funcGetRoot func() *HPdf) {
 	s.CharacterToGlyphIndex = NewMapOfCharacterToGlyphIndex() //make(map[rune]uint)
 	s.funcKernOverride = nil
 	s.funcGetRoot = funcGetRoot

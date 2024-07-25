@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -42,7 +42,7 @@ func (extOpt ExtGStateOptions) GetId() string {
 	return id
 }
 
-func GetCachedExtGState(opts ExtGStateOptions, gp *GoPdf) (ExtGState, error) {
+func GetCachedExtGState(opts ExtGStateOptions, gp *HPdf) (ExtGState, error) {
 	extGState, ok := gp.curr.extGStatesMap.Find(opts)
 	if !ok {
 		extGState = ExtGState{
@@ -70,7 +70,7 @@ func GetCachedExtGState(opts ExtGStateOptions, gp *GoPdf) (ExtGState, error) {
 	return extGState, nil
 }
 
-func (egs ExtGState) init(func() *GoPdf) {}
+func (egs ExtGState) init(func() *HPdf) {}
 
 func (egs ExtGState) getType() string {
 	return "ExtGState"

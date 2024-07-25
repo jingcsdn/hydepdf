@@ -1,10 +1,10 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
 	"io"
 
-	"github.com/signintech/gopdf/fontmaker/core"
+	"github.com/signintech/hpdf/fontmaker/core"
 )
 
 // SubfontDescriptorObj pdf subfont descriptorObj object
@@ -13,7 +13,7 @@ type SubfontDescriptorObj struct {
 	indexObjPdfDictionary int
 }
 
-func (s *SubfontDescriptorObj) init(func() *GoPdf) {}
+func (s *SubfontDescriptorObj) init(func() *HPdf) {}
 
 func (s *SubfontDescriptorObj) getType() string {
 	return "SubFontDescriptor"

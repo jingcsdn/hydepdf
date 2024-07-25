@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -17,7 +17,7 @@ const (
 type SMask struct {
 	imgInfo
 	data []byte
-	//getRoot func() *GoPdf
+	//getRoot func() *HPdf
 	pdfProtection                 *PDFProtection
 	Index                         int
 	TransparencyXObjectGroupIndex int
@@ -35,7 +35,7 @@ func (smask SMaskOptions) GetId() string {
 	return id
 }
 
-func GetCachedMask(opts SMaskOptions, gp *GoPdf) SMask {
+func GetCachedMask(opts SMaskOptions, gp *HPdf) SMask {
 	smask, ok := gp.curr.sMasksMap.Find(opts)
 	if !ok {
 		smask = SMask{
@@ -50,7 +50,7 @@ func GetCachedMask(opts SMaskOptions, gp *GoPdf) SMask {
 	return smask
 }
 
-func (s SMask) init(func() *GoPdf) {}
+func (s SMask) init(func() *HPdf) {}
 
 func (s *SMask) setProtection(p *PDFProtection) {
 	s.pdfProtection = p

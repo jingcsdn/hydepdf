@@ -5,10 +5,10 @@ import (
 	"os"
 	"time"
 
-	"github.com/signintech/gopdf"
+	"github.com/signintech/hpdf"
 )
 
-func GetFont(pdf *gopdf.GoPdf, fontPath string) (err error) {
+func GetFont(pdf *hpdf.HPdf, fontPath string) (err error) {
 	b, err := os.Open(fontPath)
 	if err != nil {
 		return err
@@ -21,8 +21,8 @@ func GetFont(pdf *gopdf.GoPdf, fontPath string) (err error) {
 }
 
 func OutlineWithPositionExample() (err error) {
-	pdf := &gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf := &hpdf.HPdf{}
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	err = GetFont(pdf, "./Ubuntu-L.ttf")
 	if err != nil {
 		return err
@@ -75,8 +75,8 @@ func OutlineWithPositionExample() (err error) {
 
 // OutlineWithLevelExample outlines with multiple level
 func OutlineWithLevelExample() (err error) {
-	pdf := &gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf := &hpdf.HPdf{}
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	err = GetFont(pdf, "./Ubuntu-L.ttf")
 	if err != nil {
 		return err
@@ -99,11 +99,11 @@ func OutlineWithLevelExample() (err error) {
 	*/
 
 	// outline nodes
-	var outlineNodes gopdf.OutlineNodes
-	var first = new(gopdf.OutlineNode)
-	var second = new(gopdf.OutlineNode)
-	var third = new(gopdf.OutlineNode)
-	var nodeObjs = make([]*gopdf.OutlineNode, 0)
+	var outlineNodes hpdf.OutlineNodes
+	var first = new(hpdf.OutlineNode)
+	var second = new(hpdf.OutlineNode)
+	var third = new(hpdf.OutlineNode)
+	var nodeObjs = make([]*hpdf.OutlineNode, 0)
 	nodeObjs = append(nodeObjs, first, second, third)
 	outlineNodes = nodeObjs
 
@@ -125,7 +125,7 @@ func OutlineWithLevelExample() (err error) {
 
 	pdf.SetY(250)
 	lv21 := pdf.AddOutlineWithPosition("level 2-1")
-	var node21 = new(gopdf.OutlineNode)
+	var node21 = new(hpdf.OutlineNode)
 	node21.Obj = lv21
 	second.Children = append(second.Children, node21)
 	err = pdf.Text("level 2-1...")
@@ -135,7 +135,7 @@ func OutlineWithLevelExample() (err error) {
 
 	pdf.SetY(350)
 	lv22 := pdf.AddOutlineWithPosition("level 2-2")
-	var node22 = new(gopdf.OutlineNode)
+	var node22 = new(hpdf.OutlineNode)
 	node22.Obj = lv22
 	second.Children = append(second.Children, node22)
 	err = pdf.Text("level 2-2...")
@@ -145,7 +145,7 @@ func OutlineWithLevelExample() (err error) {
 
 	pdf.SetY(500)
 	lv31 := pdf.AddOutlineWithPosition("level 3-1")
-	var node31 = new(gopdf.OutlineNode)
+	var node31 = new(hpdf.OutlineNode)
 	node31.Obj = lv31
 	node22.Children = append(node22.Children, node31)
 	err = pdf.Text("level 3-1...")
@@ -155,7 +155,7 @@ func OutlineWithLevelExample() (err error) {
 
 	pdf.SetY(600)
 	lv32 := pdf.AddOutlineWithPosition("level 3-2")
-	var node32 = new(gopdf.OutlineNode)
+	var node32 = new(hpdf.OutlineNode)
 	node32.Obj = lv32
 	node22.Children = append(node22.Children, node32)
 	err = pdf.Text("level 3-2...")

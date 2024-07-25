@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"errors"
@@ -32,7 +32,7 @@ func TestKern01(t *testing.T) {
 }
 
 func kern01(font string, prefix string, leftRune rune, rightRune rune) (int, error) {
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{Unit: UnitPT, PageSize: *PageSizeA4})
 	pdf.AddPage()
 	err := pdf.AddTTFFontWithOption(prefix, font, TtfOption{

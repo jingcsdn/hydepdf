@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"bufio"
@@ -36,8 +36,8 @@ var ErrInvalidRectangleCoordinates = errors.New("Invalid coordinates for the rec
 
 var ErrInvalidRectangleRadius = errors.New("Radius length cannot exceed rectangle height or width")
 
-// GoPdf : A simple library for generating PDF written in Go lang
-type GoPdf struct {
+// HPdf : A simple library for generating PDF written in Go lang
+type HPdf struct {
 
 	//page Margin
 	//leftMargin float64
@@ -152,7 +152,7 @@ type polygonOptions struct {
 }
 
 // SetLineWidth : set line width
-func (gp *GoPdf) SetLineWidth(width float64) {
+func (gp *HPdf) SetLineWidth(width float64) {
 	gp.curr.lineWidth = gp.UnitsToPoints(width)
 	gp.getContent().AppendStreamSetLineWidth(gp.UnitsToPoints(width))
 }
@@ -164,7 +164,7 @@ func (gp *GoPdf) SetLineWidth(width float64) {
 //	 0 No compression,
 //	 1 fastest compression, but not very good ratio
 //	 9 best compression, but slowest
-func (gp *GoPdf) SetCompressLevel(level int) {
+func (gp *HPdf) SetCompressLevel(level int) {
 	errfmt := "compress level too %s, using %s instead\n"
 	if level < -2 { //-2 = zlib.HuffmanOnly
 		fmt.Fprintf(os.Stderr, errfmt, "small", "DefaultCompression")
@@ -179,7 +179,7 @@ func (gp *GoPdf) SetCompressLevel(level int) {
 }
 
 // SetNoCompression : compressLevel = 0
-func (gp *GoPdf) SetNoCompression() {
+func (gp *HPdf) SetNoCompression() {
 	gp.compressLevel = zlib.NoCompression
 }
 
@@ -190,7 +190,7 @@ func (gp *GoPdf) SetNoCompression() {
 //	pdf.Line(50, 200, 550, 200)
 //	pdf.SetLineType("dotted")
 //	pdf.Line(50, 400, 550, 400)
-func (gp *GoPdf) SetLineType(linetype string) {
+func (gp *HPdf) SetLineType(linetype string) {
 	gp.getContent().AppendStreamSetLineType(linetype)
 }
 
@@ -199,7 +199,7 @@ func (gp *GoPdf) SetLineType(linetype string) {
 //	Usage:
 //	pdf.SetCustomLineType([]float64{0.8, 0.8}, 0)
 //	pdf.Line(50, 200, 550, 200)
-func (gp *GoPdf) SetCustomLineType(dashArray []float64, dashPhase float64) {
+func (gp *HPdf) SetCustomLineType(dashArray []float64, dashPhase float64) {
 	for i := range dashArray {
 		gp.UnitsToPointsVar(&dashArray[i])
 	}
@@ -210,13 +210,13 @@ func (gp *GoPdf) SetCustomLineType(dashArray []float64, dashPhase float64) {
 // Line : draw line
 //
 //	Usage:
-//	pdf.SetTransparency(gopdf.Transparency{Alpha: 0.5,BlendModeType: gopdf.ColorBurn})
+//	pdf.SetTransparency(hpdf.Transparency{Alpha: 0.5,BlendModeType: hpdf.ColorBurn})
 //	pdf.SetLineType("dotted")
 //	pdf.SetStrokeColor(255, 0, 0)
 //	pdf.SetLineWidth(2)
 //	pdf.Line(10, 30, 585, 30)
 //	pdf.ClearTransparency()
-func (gp *GoPdf) Line(x1 float64, y1 float64, x2 float64, y2 float64) {
+func (gp *HPdf) Line(x1 float64, y1 float64, x2 float64, y2 float64) {
 	gp.UnitsToPointsVar(&x1, &y1, &x2, &y2)
 	transparency, err := gp.getCachedTransparency(nil)
 	if err != nil {
@@ -230,7 +230,7 @@ func (gp *GoPdf) Line(x1 float64, y1 float64, x2 float64, y2 float64) {
 }
 
 // RectFromLowerLeft : draw rectangle from lower-left corner (x, y)
-func (gp *GoPdf) RectFromLowerLeft(x float64, y float64, wdth float64, hght float64) {
+func (gp *HPdf) RectFromLowerLeft(x float64, y float64, wdth float64, hght float64) {
 	gp.UnitsToPointsVar(&x, &y, &wdth, &hght)
 
 	opts := DrawableRectOptions{
@@ -244,7 +244,7 @@ func (gp *GoPdf) RectFromLowerLeft(x float64, y float64, wdth float64, hght floa
 }
 
 // RectFromUpperLeft : draw rectangle from upper-left corner (x, y)
-func (gp *GoPdf) RectFromUpperLeft(x float64, y float64, wdth float64, hght float64) {
+func (gp *HPdf) RectFromUpperLeft(x float64, y float64, wdth float64, hght float64) {
 	gp.UnitsToPointsVar(&x, &y, &wdth, &hght)
 
 	opts := DrawableRectOptions{
@@ -262,7 +262,7 @@ func (gp *GoPdf) RectFromUpperLeft(x float64, y float64, wdth float64, hght floa
 //     D or empty string: draw. This is the default value.
 //     F: fill
 //     DF or FD: draw and fill
-func (gp *GoPdf) RectFromLowerLeftWithStyle(x float64, y float64, wdth float64, hght float64, style string) {
+func (gp *HPdf) RectFromLowerLeftWithStyle(x float64, y float64, wdth float64, hght float64, style string) {
 	opts := DrawableRectOptions{
 		X: x,
 		Y: y,
@@ -275,7 +275,7 @@ func (gp *GoPdf) RectFromLowerLeftWithStyle(x float64, y float64, wdth float64, 
 	gp.RectFromLowerLeftWithOpts(opts)
 }
 
-func (gp *GoPdf) RectFromLowerLeftWithOpts(opts DrawableRectOptions) error {
+func (gp *HPdf) RectFromLowerLeftWithOpts(opts DrawableRectOptions) error {
 	gp.UnitsToPointsVar(&opts.X, &opts.Y, &opts.W, &opts.H)
 
 	imageTransparency, err := gp.getCachedTransparency(opts.Transparency)
@@ -297,7 +297,7 @@ func (gp *GoPdf) RectFromLowerLeftWithOpts(opts DrawableRectOptions) error {
 //     D or empty string: draw. This is the default value.
 //     F: fill
 //     DF or FD: draw and fill
-func (gp *GoPdf) RectFromUpperLeftWithStyle(x float64, y float64, wdth float64, hght float64, style string) {
+func (gp *HPdf) RectFromUpperLeftWithStyle(x float64, y float64, wdth float64, hght float64, style string) {
 	opts := DrawableRectOptions{
 		X: x,
 		Y: y,
@@ -310,7 +310,7 @@ func (gp *GoPdf) RectFromUpperLeftWithStyle(x float64, y float64, wdth float64, 
 	gp.RectFromUpperLeftWithOpts(opts)
 }
 
-func (gp *GoPdf) RectFromUpperLeftWithOpts(opts DrawableRectOptions) error {
+func (gp *HPdf) RectFromUpperLeftWithOpts(opts DrawableRectOptions) error {
 	gp.UnitsToPointsVar(&opts.X, &opts.Y, &opts.W, &opts.H)
 
 	opts.Y += opts.H
@@ -330,40 +330,40 @@ func (gp *GoPdf) RectFromUpperLeftWithOpts(opts DrawableRectOptions) error {
 }
 
 // Oval : draw oval
-func (gp *GoPdf) Oval(x1 float64, y1 float64, x2 float64, y2 float64) {
+func (gp *HPdf) Oval(x1 float64, y1 float64, x2 float64, y2 float64) {
 	gp.UnitsToPointsVar(&x1, &y1, &x2, &y2)
 	gp.getContent().AppendStreamOval(x1, y1, x2, y2)
 }
 
 // Br : new line
-func (gp *GoPdf) Br(h float64) {
+func (gp *HPdf) Br(h float64) {
 	gp.UnitsToPointsVar(&h)
 	gp.curr.Y += h
 	gp.curr.X = gp.margins.Left
 }
 
 // SetGrayFill set the grayscale for the fill, takes a float64 between 0.0 and 1.0
-func (gp *GoPdf) SetGrayFill(grayScale float64) {
+func (gp *HPdf) SetGrayFill(grayScale float64) {
 	gp.curr.txtColorMode = "gray"
 	gp.curr.grayFill = grayScale
 	gp.getContent().AppendStreamSetGrayFill(grayScale)
 }
 
 // SetGrayStroke set the grayscale for the stroke, takes a float64 between 0.0 and 1.0
-func (gp *GoPdf) SetGrayStroke(grayScale float64) {
+func (gp *HPdf) SetGrayStroke(grayScale float64) {
 	gp.curr.grayStroke = grayScale
 	gp.getContent().AppendStreamSetGrayStroke(grayScale)
 }
 
 // SetX : set current position X
-func (gp *GoPdf) SetX(x float64) {
+func (gp *HPdf) SetX(x float64) {
 	gp.UnitsToPointsVar(&x)
 	gp.curr.setXCount++
 	gp.curr.X = x
 }
 
 // GetX : get current position X
-func (gp *GoPdf) GetX() float64 {
+func (gp *HPdf) GetX() float64 {
 	return gp.PointsToUnits(gp.curr.X)
 }
 
@@ -375,7 +375,7 @@ func (gp *GoPdf) GetX() float64 {
 // Because of called AddPage(), X is set to MarginLeft, so you should specify X if needed,
 // or make sure SetX() is after SetNewY(), or using SetNewXY().
 // SetNewYIfNoOffset is more suitable for scenarios where the offset does not change, such as pdf.Image().
-func (gp *GoPdf) SetNewY(y float64, h float64) {
+func (gp *HPdf) SetNewY(y float64, h float64) {
 	gp.UnitsToPointsVar(&y)
 	gp.UnitsToPointsVar(&h)
 	if gp.curr.Y+h > gp.curr.pageSize.H-gp.MarginBottom() {
@@ -391,7 +391,7 @@ func (gp *GoPdf) SetNewY(y float64, h float64) {
 // MarginBottom is 10px, and the height of the element(such as image) to be inserted is 200px,
 // because 10<200, you need to add another page and set y to 20px.
 // Tips: gp.curr.X and gp.curr.Y do not change when pdf.Image() is called.
-func (gp *GoPdf) SetNewYIfNoOffset(y float64, h float64) {
+func (gp *HPdf) SetNewYIfNoOffset(y float64, h float64) {
 	gp.UnitsToPointsVar(&y)
 	gp.UnitsToPointsVar(&h)
 	if y+h > gp.curr.pageSize.H-gp.MarginBottom() { // using new y(*y) instead of gp.curr.Y
@@ -408,7 +408,7 @@ func (gp *GoPdf) SetNewYIfNoOffset(y float64, h float64) {
 // because 10<25, you need to add another page and set y to 20px.
 // Because of AddPage(), X is set to MarginLeft, so you should specify X if needed,
 // or make sure SetX() is after SetNewY().
-func (gp *GoPdf) SetNewXY(y float64, x, h float64) {
+func (gp *HPdf) SetNewXY(y float64, x, h float64) {
 	gp.UnitsToPointsVar(&y)
 	gp.UnitsToPointsVar(&h)
 	if gp.curr.Y+h > gp.curr.pageSize.H-gp.MarginBottom() {
@@ -421,7 +421,7 @@ func (gp *GoPdf) SetNewXY(y float64, x, h float64) {
 
 /*
 //experimental
-func (gp *GoPdf) SetNewY(y float64, h float64) float64 {
+func (gp *HPdf) SetNewY(y float64, h float64) float64 {
 	gp.UnitsToPointsVar(&y)
 	gp.UnitsToPointsVar(&h)
 	if gp.curr.Y+h > gp.curr.pageSize.H-gp.MarginBottom() {
@@ -433,7 +433,7 @@ func (gp *GoPdf) SetNewY(y float64, h float64) float64 {
 }
 
 //experimental
-func (gp *GoPdf) SetNewYIfNoOffset(y float64, h float64) float64 {
+func (gp *HPdf) SetNewYIfNoOffset(y float64, h float64) float64 {
 	gp.UnitsToPointsVar(&y)
 	gp.UnitsToPointsVar(&h)
 	if y+h > gp.curr.pageSize.H-gp.MarginBottom() { // using new y(*y) instead of gp.curr.Y
@@ -445,7 +445,7 @@ func (gp *GoPdf) SetNewYIfNoOffset(y float64, h float64) float64 {
 }
 
 //experimental
-func (gp *GoPdf) SetNewXY(y float64, x, h float64) float64{
+func (gp *HPdf) SetNewXY(y float64, x, h float64) float64{
 	gp.UnitsToPointsVar(&y)
 	gp.UnitsToPointsVar(&h)
 	if gp.curr.Y+h > gp.curr.pageSize.H-gp.MarginBottom() {
@@ -459,18 +459,18 @@ func (gp *GoPdf) SetNewXY(y float64, x, h float64) float64{
 */
 
 // SetY : set current position y
-func (gp *GoPdf) SetY(y float64) {
+func (gp *HPdf) SetY(y float64) {
 	gp.UnitsToPointsVar(&y)
 	gp.curr.Y = y
 }
 
 // GetY : get current position y
-func (gp *GoPdf) GetY() float64 {
+func (gp *HPdf) GetY() float64 {
 	return gp.PointsToUnits(gp.curr.Y)
 }
 
 // SetXY : set current position x and y
-func (gp *GoPdf) SetXY(x, y float64) {
+func (gp *HPdf) SetXY(x, y float64) {
 	gp.UnitsToPointsVar(&x)
 	gp.curr.setXCount++
 	gp.curr.X = x
@@ -480,7 +480,7 @@ func (gp *GoPdf) SetXY(x, y float64) {
 }
 
 // ImageByHolder : draw image by ImageHolder
-func (gp *GoPdf) ImageByHolder(img ImageHolder, x float64, y float64, rect *Rect) error {
+func (gp *HPdf) ImageByHolder(img ImageHolder, x float64, y float64, rect *Rect) error {
 	gp.UnitsToPointsVar(&x, &y)
 
 	rect = rect.UnitsToPoints(gp.config.Unit)
@@ -494,7 +494,7 @@ func (gp *GoPdf) ImageByHolder(img ImageHolder, x float64, y float64, rect *Rect
 	return gp.imageByHolder(img, imageOptions)
 }
 
-func (gp *GoPdf) ImageByHolderWithOptions(img ImageHolder, opts ImageOptions) error {
+func (gp *HPdf) ImageByHolderWithOptions(img ImageHolder, opts ImageOptions) error {
 	gp.UnitsToPointsVar(&opts.X, &opts.Y)
 
 	opts.Rect = opts.Rect.UnitsToPoints(gp.config.Unit)
@@ -532,7 +532,7 @@ func (gp *GoPdf) ImageByHolderWithOptions(img ImageHolder, opts ImageOptions) er
 	return gp.imageByHolder(img, opts)
 }
 
-func (gp *GoPdf) maskHolder(img ImageHolder, opts MaskOptions) (int, error) {
+func (gp *HPdf) maskHolder(img ImageHolder, opts MaskOptions) (int, error) {
 	var cacheImage *ImageCache
 	var cacheContentImage *cacheContentImage
 
@@ -545,7 +545,7 @@ func (gp *GoPdf) maskHolder(img ImageHolder, opts MaskOptions) (int, error) {
 
 	if cacheImage == nil {
 		maskImgobj := &ImageObj{IsMask: true}
-		maskImgobj.init(func() *GoPdf {
+		maskImgobj.init(func() *HPdf {
 			return gp
 		})
 		maskImgobj.setProtection(gp.protection())
@@ -599,7 +599,7 @@ func (gp *GoPdf) maskHolder(img ImageHolder, opts MaskOptions) (int, error) {
 	return 0, ErrUndefinedCacheContentImage
 }
 
-func (gp *GoPdf) createTransparencyXObjectGroup(image *cacheContentImage, opts MaskOptions) (int, error) {
+func (gp *HPdf) createTransparencyXObjectGroup(image *cacheContentImage, opts MaskOptions) (int, error) {
 	bbox := opts.BBox
 	if bbox == nil {
 		bbox = &[4]float64{
@@ -642,7 +642,7 @@ func (gp *GoPdf) createTransparencyXObjectGroup(image *cacheContentImage, opts M
 	return extGState.Index + 1, nil
 }
 
-func (gp *GoPdf) imageByHolder(img ImageHolder, opts ImageOptions) error {
+func (gp *HPdf) imageByHolder(img ImageHolder, opts ImageOptions) error {
 	cacheImageIndex := -1
 
 	for _, imgcache := range gp.curr.ImgCaches {
@@ -660,7 +660,7 @@ func (gp *GoPdf) imageByHolder(img ImageHolder, opts ImageOptions) error {
 			imgobj.SplittedMask = true
 		}
 
-		imgobj.init(func() *GoPdf {
+		imgobj.init(func() *HPdf {
 			return gp
 		})
 		imgobj.setProtection(gp.protection())
@@ -708,7 +708,7 @@ func (gp *GoPdf) imageByHolder(img ImageHolder, opts ImageOptions) error {
 			if err != nil {
 				return err
 			}
-			dRGB.getRoot = func() *GoPdf {
+			dRGB.getRoot = func() *HPdf {
 				return gp
 			}
 			imgobj.imginfo.deviceRGBObjID = gp.addObj(dRGB)
@@ -725,7 +725,7 @@ func (gp *GoPdf) imageByHolder(img ImageHolder, opts ImageOptions) error {
 }
 
 // Image : draw image
-func (gp *GoPdf) Image(picPath string, x float64, y float64, rect *Rect) error {
+func (gp *HPdf) Image(picPath string, x float64, y float64, rect *Rect) error {
 	gp.UnitsToPointsVar(&x, &y)
 	rect = rect.UnitsToPoints(gp.config.Unit)
 	imgh, err := ImageHolderByPath(picPath)
@@ -742,7 +742,7 @@ func (gp *GoPdf) Image(picPath string, x float64, y float64, rect *Rect) error {
 	return gp.imageByHolder(imgh, imageOptions)
 }
 
-func (gp *GoPdf) ImageFormStream(pic []byte, x float64, y float64, rect *Rect) error {
+func (gp *HPdf) ImageFormStream(pic []byte, x float64, y float64, rect *Rect) error {
 	gp.UnitsToPointsVar(&x, &y)
 	rect = rect.UnitsToPoints(gp.config.Unit)
 	imgh, err := ImageHolderByBytes(pic)
@@ -759,7 +759,7 @@ func (gp *GoPdf) ImageFormStream(pic []byte, x float64, y float64, rect *Rect) e
 	return gp.imageByHolder(imgh, imageOptions)
 }
 
-func (gp *GoPdf) ImageFrom(img image.Image, x float64, y float64, rect *Rect) error {
+func (gp *HPdf) ImageFrom(img image.Image, x float64, y float64, rect *Rect) error {
 	return gp.ImageFromWithOption(img, ImageFromOption{
 		Format: "png",
 		X:      x,
@@ -768,7 +768,7 @@ func (gp *GoPdf) ImageFrom(img image.Image, x float64, y float64, rect *Rect) er
 	})
 }
 
-func (gp *GoPdf) ImageFromWithOption(img image.Image, opts ImageFromOption) error {
+func (gp *HPdf) ImageFromWithOption(img image.Image, opts ImageFromOption) error {
 	if img == nil {
 		return errors.New("Invalid image")
 	}
@@ -809,18 +809,18 @@ func (gp *GoPdf) ImageFromWithOption(img image.Image, opts ImageFromOption) erro
 }
 
 // AddPage : add new page
-func (gp *GoPdf) AddPage() {
+func (gp *HPdf) AddPage() {
 	emptyOpt := PageOption{}
 	gp.AddPageWithOption(emptyOpt)
 }
 
 // AddPageWithOption  : add new page with option
-func (gp *GoPdf) AddPageWithOption(opt PageOption) {
+func (gp *HPdf) AddPageWithOption(opt PageOption) {
 	opt.TrimBox = opt.TrimBox.UnitsToPoints(gp.config.Unit)
 	opt.PageSize = opt.PageSize.UnitsToPoints(gp.config.Unit)
 
 	page := new(PageObj)
-	page.init(func() *GoPdf {
+	page.init(func() *HPdf {
 		return gp
 	})
 
@@ -860,53 +860,53 @@ func (gp *GoPdf) AddPageWithOption(opt PageOption) {
 	}
 }
 
-func (gp *GoPdf) AddOutline(title string) {
+func (gp *HPdf) AddOutline(title string) {
 	gp.outlines.AddOutline(gp.curr.IndexOfPageObj+1, title)
 }
 
 // AddOutlineWithPosition add an outline with position
-func (gp *GoPdf) AddOutlineWithPosition(title string) *OutlineObj {
+func (gp *HPdf) AddOutlineWithPosition(title string) *OutlineObj {
 	return gp.outlines.AddOutlinesWithPosition(gp.curr.IndexOfPageObj+1, title, gp.config.PageSize.H-gp.curr.Y+20)
 }
 
 // AddHeader - add a header function, if present this will be automatically called by AddPage()
-func (gp *GoPdf) AddHeader(f func()) {
+func (gp *HPdf) AddHeader(f func()) {
 	gp.headerFunc = f
 }
 
 // AddFooter - add a footer function, if present this will be automatically called by AddPage()
-func (gp *GoPdf) AddFooter(f func()) {
+func (gp *HPdf) AddFooter(f func()) {
 	gp.footerFunc = f
 }
 
-// Start : init gopdf
-func (gp *GoPdf) Start(config Config) {
+// Start : init hpdf
+func (gp *HPdf) Start(config Config) {
 
 	gp.start(config)
 
 }
 
-func (gp *GoPdf) StartWithImporter(config Config, importer *gofpdi.Importer) {
+func (gp *HPdf) StartWithImporter(config Config, importer *gofpdi.Importer) {
 
 	gp.start(config, importer)
 
 }
 
-func (gp *GoPdf) start(config Config, importer ...*gofpdi.Importer) {
+func (gp *HPdf) start(config Config, importer ...*gofpdi.Importer) {
 
 	gp.config = config
 	gp.init(importer...)
 	//init all basic obj
 	catalog := new(CatalogObj)
-	catalog.init(func() *GoPdf {
+	catalog.init(func() *HPdf {
 		return gp
 	})
 	pages := new(PagesObj)
-	pages.init(func() *GoPdf {
+	pages.init(func() *HPdf {
 		return gp
 	})
 	gp.outlines = new(OutlinesObj)
-	gp.outlines.init(func() *GoPdf {
+	gp.outlines.init(func() *HPdf {
 		return gp
 	})
 	gp.indexOfCatalogObj = gp.addObj(catalog)
@@ -916,7 +916,7 @@ func (gp *GoPdf) start(config Config, importer ...*gofpdi.Importer) {
 
 	//indexOfProcSet
 	procset := new(ProcSetObj)
-	procset.init(func() *GoPdf {
+	procset.init(func() *HPdf {
 		return gp
 	})
 	gp.indexOfProcSet = gp.addObj(procset)
@@ -964,7 +964,7 @@ func convertNumericToFloat64(size interface{}) (fontSize float64, err error) {
 // SetFontWithStyle : set font style support Regular or Underline
 // for Bold|Italic should be loaded appropriate fonts with same styles defined
 // size MUST be uint*, int* or float64*
-func (gp *GoPdf) SetFontWithStyle(family string, style int, size interface{}) error {
+func (gp *HPdf) SetFontWithStyle(family string, style int, size interface{}) error {
 	fontSize, err := convertNumericToFloat64(size)
 	if err != nil {
 		return err
@@ -1000,44 +1000,44 @@ func (gp *GoPdf) SetFontWithStyle(family string, style int, size interface{}) er
 // SetFont : set font style support "" or "U"
 // for "B" and "I" should be loaded appropriate fonts with same styles defined
 // size MUST be uint*, int* or float64*
-func (gp *GoPdf) SetFont(family string, style string, size interface{}) error {
+func (gp *HPdf) SetFont(family string, style string, size interface{}) error {
 	return gp.SetFontWithStyle(family, getConvertedStyle(style), size)
 }
 
 // SetFontSize : set the font size (and only the font size) of the currently
 // active font
-func (gp *GoPdf) SetFontSize(fontSize float64) error {
+func (gp *HPdf) SetFontSize(fontSize float64) error {
 	gp.curr.FontSize = fontSize
 	return nil
 }
 
 // SetCharSpacing : set the character spacing of the currently active font
-func (gp *GoPdf) SetCharSpacing(charSpacing float64) error {
+func (gp *HPdf) SetCharSpacing(charSpacing float64) error {
 	gp.UnitsToPointsVar(&charSpacing)
 	gp.curr.CharSpacing = charSpacing
 	return nil
 }
 
 // WritePdf : write pdf file
-func (gp *GoPdf) WritePdf(pdfPath string) error {
+func (gp *HPdf) WritePdf(pdfPath string) error {
 	return os.WriteFile(pdfPath, gp.GetBytesPdf(), 0644)
 }
 
 // WriteTo implements the io.WriterTo interface and can
 // be used to stream the PDF as it is compiled to an io.Writer.
-func (gp *GoPdf) WriteTo(w io.Writer) (n int64, err error) {
+func (gp *HPdf) WriteTo(w io.Writer) (n int64, err error) {
 	return gp.compilePdf(w)
 }
 
 // Write streams the pdf as it is compiled to an io.Writer
 //
 // Deprecated: use the WriteTo method instead.
-func (gp *GoPdf) Write(w io.Writer) error {
+func (gp *HPdf) Write(w io.Writer) error {
 	_, err := gp.compilePdf(w)
 	return err
 }
 
-func (gp *GoPdf) Read(p []byte) (int, error) {
+func (gp *HPdf) Read(p []byte) (int, error) {
 	if gp.buf.Len() == 0 && gp.buf.Cap() == 0 {
 		if _, err := gp.compilePdf(&gp.buf); err != nil {
 			return 0, err
@@ -1046,13 +1046,13 @@ func (gp *GoPdf) Read(p []byte) (int, error) {
 	return gp.buf.Read(p)
 }
 
-// Close clears the gopdf buffer.
-func (gp *GoPdf) Close() error {
+// Close clears the hpdf buffer.
+func (gp *HPdf) Close() error {
 	gp.buf = bytes.Buffer{}
 	return nil
 }
 
-func (gp *GoPdf) compilePdf(w io.Writer) (n int64, err error) {
+func (gp *HPdf) compilePdf(w io.Writer) (n int64, err error) {
 	gp.prepare()
 	err = gp.Close()
 	if err != nil {
@@ -1095,7 +1095,7 @@ func (cw *countingWriter) Write(b []byte) (int, error) {
 }
 
 // GetBytesPdfReturnErr : get bytes of pdf file
-func (gp *GoPdf) GetBytesPdfReturnErr() ([]byte, error) {
+func (gp *HPdf) GetBytesPdfReturnErr() ([]byte, error) {
 	err := gp.Close()
 	if err != nil {
 		return nil, err
@@ -1105,7 +1105,7 @@ func (gp *GoPdf) GetBytesPdfReturnErr() ([]byte, error) {
 }
 
 // GetBytesPdf : get bytes of pdf file
-func (gp *GoPdf) GetBytesPdf() []byte {
+func (gp *HPdf) GetBytesPdf() []byte {
 	b, err := gp.GetBytesPdfReturnErr()
 	if err != nil {
 		log.Fatalf("%s", err.Error())
@@ -1114,7 +1114,7 @@ func (gp *GoPdf) GetBytesPdf() []byte {
 }
 
 // Text write text start at current x,y ( current y is the baseline of text )
-func (gp *GoPdf) Text(text string) error {
+func (gp *HPdf) Text(text string) error {
 
 	text, err := gp.curr.FontISubset.AddChars(text)
 	if err != nil {
@@ -1130,7 +1130,7 @@ func (gp *GoPdf) Text(text string) error {
 }
 
 // CellWithOption create cell of text ( use current x,y is upper-left corner of cell)
-func (gp *GoPdf) CellWithOption(rectangle *Rect, text string, opt CellOption) error {
+func (gp *HPdf) CellWithOption(rectangle *Rect, text string, opt CellOption) error {
 	transparency, err := gp.getCachedTransparency(opt.Transparency)
 	if err != nil {
 		return err
@@ -1154,7 +1154,7 @@ func (gp *GoPdf) CellWithOption(rectangle *Rect, text string, opt CellOption) er
 
 // Cell : create cell of text ( use current x,y is upper-left corner of cell)
 // Note that this has no effect on Rect.H pdf (now). Fix later :-)
-func (gp *GoPdf) Cell(rectangle *Rect, text string) error {
+func (gp *HPdf) Cell(rectangle *Rect, text string) error {
 	rectangle = rectangle.UnitsToPoints(gp.config.Unit)
 	defaultopt := CellOption{
 		Align:  Left | Top,
@@ -1175,7 +1175,7 @@ func (gp *GoPdf) Cell(rectangle *Rect, text string) error {
 }
 
 // MultiCell : create of text with line breaks ( use current x,y is upper-left corner of cell)
-func (gp *GoPdf) MultiCell(rectangle *Rect, text string) error {
+func (gp *HPdf) MultiCell(rectangle *Rect, text string) error {
 	var line []rune
 	x := gp.GetX()
 	var totalLineHeight float64
@@ -1219,7 +1219,7 @@ func (gp *GoPdf) MultiCell(rectangle *Rect, text string) error {
 }
 
 // IsFitMultiCell : check whether the rectangle's area is big enough for the text
-func (gp *GoPdf) IsFitMultiCell(rectangle *Rect, text string) (bool, float64, error) {
+func (gp *HPdf) IsFitMultiCell(rectangle *Rect, text string) (bool, float64, error) {
 	var line []rune
 	var totalLineHeight float64
 	length := len([]rune(text))
@@ -1264,7 +1264,7 @@ func (gp *GoPdf) IsFitMultiCell(rectangle *Rect, text string) (bool, float64, er
 }
 
 // IsFitMultiCellWithNewline : similar to IsFitMultiCell, but process char newline as Br
-func (gp *GoPdf) IsFitMultiCellWithNewline(rectangle *Rect, text string) (bool, float64, error) {
+func (gp *HPdf) IsFitMultiCellWithNewline(rectangle *Rect, text string) (bool, float64, error) {
 	r := *rectangle
 	strs := strings.Split(text, "\n")
 
@@ -1280,7 +1280,7 @@ func (gp *GoPdf) IsFitMultiCellWithNewline(rectangle *Rect, text string) (bool, 
 }
 
 // MultiCellWithOption create of text with line breaks ( use current x,y is upper-left corner of cell)
-func (gp *GoPdf) MultiCellWithOption(rectangle *Rect, text string, opt CellOption) error {
+func (gp *HPdf) MultiCellWithOption(rectangle *Rect, text string, opt CellOption) error {
 	if opt.BreakOption == nil {
 		opt.BreakOption = &DefaultBreakOption
 	}
@@ -1322,13 +1322,13 @@ func (gp *GoPdf) MultiCellWithOption(rectangle *Rect, text string, opt CellOptio
 }
 
 // SplitText splits text into multiple lines based on width performing potential mid-word breaks.
-func (gp *GoPdf) SplitText(text string, width float64) ([]string, error) {
+func (gp *HPdf) SplitText(text string, width float64) ([]string, error) {
 	return gp.SplitTextWithOption(text, width, &DefaultBreakOption)
 }
 
 // SplitTextWithWordWrap behaves the same way SplitText does but performs a word-wrap considering spaces in case
 // a text line split would split a word.
-func (gp *GoPdf) SplitTextWithWordWrap(text string, width float64) ([]string, error) {
+func (gp *HPdf) SplitTextWithWordWrap(text string, width float64) ([]string, error) {
 	return gp.SplitTextWithOption(text, width, &BreakOption{
 		Mode:           BreakModeIndicatorSensitive,
 		BreakIndicator: ' ',
@@ -1337,7 +1337,7 @@ func (gp *GoPdf) SplitTextWithWordWrap(text string, width float64) ([]string, er
 
 // SplitTextWithOption splits a text into multiple lines based on the current font size of the document.
 // BreakOptions allow to define the behavior of the split (strict or sensitive). For more information see BreakOption.
-func (gp *GoPdf) SplitTextWithOption(text string, width float64, opt *BreakOption) ([]string, error) {
+func (gp *HPdf) SplitTextWithOption(text string, width float64, opt *BreakOption) ([]string, error) {
 	// fallback to default break option
 	if opt == nil {
 		opt = &DefaultBreakOption
@@ -1400,7 +1400,7 @@ func (gp *GoPdf) SplitTextWithOption(text string, width float64, opt *BreakOptio
 
 // [experimental]
 // PlaceHolderText Create a text placehold for fillin text later with function FillInPlaceHoldText.
-func (gp *GoPdf) PlaceHolderText(placeHolderName string, placeHolderWidth float64) error {
+func (gp *HPdf) PlaceHolderText(placeHolderName string, placeHolderWidth float64) error {
 
 	//placeHolderText := fmt.Sprintf("{%s}", placeHolderName)
 	_, err := gp.curr.FontISubset.AddChars("")
@@ -1437,7 +1437,7 @@ func (gp *GoPdf) PlaceHolderText(placeHolderName string, placeHolderWidth float6
 // [experimental]
 // fill in text that created by function PlaceHolderText
 // align: Left,Right,Center
-func (gp *GoPdf) FillInPlaceHoldText(placeHolderName string, text string, align int) error {
+func (gp *HPdf) FillInPlaceHoldText(placeHolderName string, text string, align int) error {
 
 	infos, ok := gp.placeHolderTexts[placeHolderName]
 	if !ok {
@@ -1519,12 +1519,12 @@ func breakIndicatorIndex(text []rune, bi rune) int {
 
 // ImportPage imports a page and return template id.
 // gofpdi code
-func (gp *GoPdf) ImportPage(sourceFile string, pageno int, box string) int {
+func (gp *HPdf) ImportPage(sourceFile string, pageno int, box string) int {
 	// Set source file for fpdi
 	gp.fpdi.SetSourceFile(sourceFile)
 
 	// gofpdi needs to know where to start the object id at.
-	// By default, it starts at 1, but gopdf adds a few objects initially.
+	// By default, it starts at 1, but hpdf adds a few objects initially.
 	startObjID := gp.GetNextObjectID()
 
 	// Set gofpdi next object ID to  whatever the value of startObjID is
@@ -1536,14 +1536,14 @@ func (gp *GoPdf) ImportPage(sourceFile string, pageno int, box string) int {
 	// Import objects into current pdf document
 	tplObjIDs := gp.fpdi.PutFormXobjects()
 
-	// Set template names and ids in gopdf
+	// Set template names and ids in hpdf
 	gp.ImportTemplates(tplObjIDs)
 
 	// Get a map[int]string of the imported objects.
 	// The map keys will be the ID of each object.
 	imported := gp.fpdi.GetImportedObjects()
 
-	// Import gofpdi objects into gopdf, starting at whatever the value of startObjID is
+	// Import gofpdi objects into hpdf, starting at whatever the value of startObjID is
 	gp.ImportObjects(imported, startObjID)
 
 	// Return template ID
@@ -1553,12 +1553,12 @@ func (gp *GoPdf) ImportPage(sourceFile string, pageno int, box string) int {
 // ImportPageStream imports page using a stream.
 // Return template id after importing.
 // gofpdi code
-func (gp *GoPdf) ImportPageStream(sourceStream *io.ReadSeeker, pageno int, box string) int {
+func (gp *HPdf) ImportPageStream(sourceStream *io.ReadSeeker, pageno int, box string) int {
 	// Set source file for fpdi
 	gp.fpdi.SetSourceStream(sourceStream)
 
 	// gofpdi needs to know where to start the object id at.
-	// By default, it starts at 1, but gopdf adds a few objects initially.
+	// By default, it starts at 1, but hpdf adds a few objects initially.
 	startObjID := gp.GetNextObjectID()
 
 	// Set gofpdi next object ID to  whatever the value of startObjID is
@@ -1570,14 +1570,14 @@ func (gp *GoPdf) ImportPageStream(sourceStream *io.ReadSeeker, pageno int, box s
 	// Import objects into current pdf document
 	tplObjIDs := gp.fpdi.PutFormXobjects()
 
-	// Set template names and ids in gopdf
+	// Set template names and ids in hpdf
 	gp.ImportTemplates(tplObjIDs)
 
 	// Get a map[int]string of the imported objects.
 	// The map keys will be the ID of each object.
 	imported := gp.fpdi.GetImportedObjects()
 
-	// Import gofpdi objects into gopdf, starting at whatever the value of startObjID is
+	// Import gofpdi objects into hpdf, starting at whatever the value of startObjID is
 	gp.ImportObjects(imported, startObjID)
 
 	// Return template ID
@@ -1585,7 +1585,7 @@ func (gp *GoPdf) ImportPageStream(sourceStream *io.ReadSeeker, pageno int, box s
 }
 
 // UseImportedTemplate draws an imported PDF page.
-func (gp *GoPdf) UseImportedTemplate(tplid int, x float64, y float64, w float64, h float64) {
+func (gp *HPdf) UseImportedTemplate(tplid int, x float64, y float64, w float64, h float64) {
 	gp.UnitsToPointsVar(&x, &y, &w, &h)
 	// Get template values to draw
 	tplName, scaleX, scaleY, tX, tY := gp.fpdi.UseTemplate(tplid, x, y, w, h)
@@ -1593,17 +1593,17 @@ func (gp *GoPdf) UseImportedTemplate(tplid int, x float64, y float64, w float64,
 }
 
 // GetNextObjectID gets the next object ID so that gofpdi knows where to start the object IDs.
-func (gp *GoPdf) GetNextObjectID() int {
+func (gp *HPdf) GetNextObjectID() int {
 	return len(gp.pdfObjs) + 1
 }
 
 // GetNumberOfPages gets the number of pages from the PDF.
-func (gp *GoPdf) GetNumberOfPages() int {
+func (gp *HPdf) GetNumberOfPages() int {
 	return gp.numOfPagesObj
 }
 
 // ImportObjects imports objects from gofpdi into current document.
-func (gp *GoPdf) ImportObjects(objs map[int]string, startObjID int) {
+func (gp *HPdf) ImportObjects(objs map[int]string, startObjID int) {
 	for i := startObjID; i < len(objs)+startObjID; i++ {
 		if objs[i] != "" {
 			gp.addObj(&ImportedObj{Data: objs[i]})
@@ -1612,7 +1612,7 @@ func (gp *GoPdf) ImportObjects(objs map[int]string, startObjID int) {
 }
 
 // ImportTemplates names into procset dictionary.
-func (gp *GoPdf) ImportTemplates(tpls map[string]int) {
+func (gp *HPdf) ImportTemplates(tpls map[string]int) {
 	procset := gp.pdfObjs[gp.indexOfProcSet].(*ProcSetObj)
 	for tplName, tplID := range tpls {
 		procset.ImportedTemplateIds[tplName] = tplID
@@ -1620,34 +1620,34 @@ func (gp *GoPdf) ImportTemplates(tpls map[string]int) {
 }
 
 // AddExternalLink adds a new external link.
-func (gp *GoPdf) AddExternalLink(url string, x, y, w, h float64) {
+func (gp *HPdf) AddExternalLink(url string, x, y, w, h float64) {
 	gp.UnitsToPointsVar(&x, &y, &w, &h)
 	page := gp.pdfObjs[gp.curr.IndexOfPageObj].(*PageObj)
 	page.Links = append(page.Links, linkOption{x, gp.config.PageSize.H - y, w, h, url, ""})
 }
 
 // AddInternalLink adds a new internal link.
-func (gp *GoPdf) AddInternalLink(anchor string, x, y, w, h float64) {
+func (gp *HPdf) AddInternalLink(anchor string, x, y, w, h float64) {
 	gp.UnitsToPointsVar(&x, &y, &w, &h)
 	page := gp.pdfObjs[gp.curr.IndexOfPageObj].(*PageObj)
 	page.Links = append(page.Links, linkOption{x, gp.config.PageSize.H - y, w, h, "", anchor})
 }
 
 // SetAnchor creates a new anchor.
-func (gp *GoPdf) SetAnchor(name string) {
+func (gp *HPdf) SetAnchor(name string) {
 	y := gp.config.PageSize.H - gp.curr.Y + float64(gp.curr.FontSize)
 	gp.anchors[name] = anchorOption{gp.curr.IndexOfPageObj, y}
 }
 
 // AddTTFFontByReader adds font data by reader.
-func (gp *GoPdf) AddTTFFontData(family string, fontData []byte) error {
+func (gp *HPdf) AddTTFFontData(family string, fontData []byte) error {
 	return gp.AddTTFFontDataWithOption(family, fontData, defaultTtfFontOption())
 }
 
 // AddTTFFontDataWithOption adds font data with option.
-func (gp *GoPdf) AddTTFFontDataWithOption(family string, fontData []byte, option TtfOption) error {
+func (gp *HPdf) AddTTFFontDataWithOption(family string, fontData []byte, option TtfOption) error {
 	subsetFont := new(SubsetFontObj)
-	subsetFont.init(func() *GoPdf {
+	subsetFont.init(func() *HPdf {
 		return gp
 	})
 	subsetFont.SetTtfFontOption(option)
@@ -1661,14 +1661,14 @@ func (gp *GoPdf) AddTTFFontDataWithOption(family string, fontData []byte, option
 }
 
 // AddTTFFontByReader adds font file by reader.
-func (gp *GoPdf) AddTTFFontByReader(family string, rd io.Reader) error {
+func (gp *HPdf) AddTTFFontByReader(family string, rd io.Reader) error {
 	return gp.AddTTFFontByReaderWithOption(family, rd, defaultTtfFontOption())
 }
 
 // AddTTFFontByReaderWithOption adds font file by reader with option.
-func (gp *GoPdf) AddTTFFontByReaderWithOption(family string, rd io.Reader, option TtfOption) error {
+func (gp *HPdf) AddTTFFontByReaderWithOption(family string, rd io.Reader, option TtfOption) error {
 	subsetFont := new(SubsetFontObj)
-	subsetFont.init(func() *GoPdf {
+	subsetFont.init(func() *HPdf {
 		return gp
 	})
 	subsetFont.SetTtfFontOption(option)
@@ -1683,9 +1683,9 @@ func (gp *GoPdf) AddTTFFontByReaderWithOption(family string, rd io.Reader, optio
 
 // setSubsetFontObject sets SubsetFontObj.
 // The given SubsetFontObj is expected to be configured in advance.
-func (gp *GoPdf) setSubsetFontObject(subsetFont *SubsetFontObj, family string, option TtfOption) error {
+func (gp *HPdf) setSubsetFontObject(subsetFont *SubsetFontObj, family string, option TtfOption) error {
 	unicodemap := new(UnicodeMap)
-	unicodemap.init(func() *GoPdf {
+	unicodemap.init(func() *HPdf {
 		return gp
 	})
 	unicodemap.setProtection(gp.protection())
@@ -1693,7 +1693,7 @@ func (gp *GoPdf) setSubsetFontObject(subsetFont *SubsetFontObj, family string, o
 	unicodeindex := gp.addObj(unicodemap)
 
 	pdfdic := new(PdfDictionaryObj)
-	pdfdic.init(func() *GoPdf {
+	pdfdic.init(func() *HPdf {
 		return gp
 	})
 	pdfdic.setProtection(gp.protection())
@@ -1701,7 +1701,7 @@ func (gp *GoPdf) setSubsetFontObject(subsetFont *SubsetFontObj, family string, o
 	pdfdicindex := gp.addObj(pdfdic)
 
 	subfontdesc := new(SubfontDescriptorObj)
-	subfontdesc.init(func() *GoPdf {
+	subfontdesc.init(func() *HPdf {
 		return gp
 	})
 	subfontdesc.SetPtrToSubsetFontObj(subsetFont)
@@ -1709,7 +1709,7 @@ func (gp *GoPdf) setSubsetFontObject(subsetFont *SubsetFontObj, family string, o
 	subfontdescindex := gp.addObj(subfontdesc)
 
 	cidfont := new(CIDFontObj)
-	cidfont.init(func() *GoPdf {
+	cidfont.init(func() *HPdf {
 		return gp
 	})
 	cidfont.SetPtrToSubsetFontObj(subsetFont)
@@ -1732,7 +1732,7 @@ func (gp *GoPdf) setSubsetFontObject(subsetFont *SubsetFontObj, family string, o
 }
 
 // AddTTFFontWithOption : add font file
-func (gp *GoPdf) AddTTFFontWithOption(family string, ttfpath string, option TtfOption) error {
+func (gp *HPdf) AddTTFFontWithOption(family string, ttfpath string, option TtfOption) error {
 
 	if _, err := os.Stat(ttfpath); os.IsNotExist(err) {
 		return err
@@ -1746,12 +1746,12 @@ func (gp *GoPdf) AddTTFFontWithOption(family string, ttfpath string, option TtfO
 }
 
 // AddTTFFont : add font file
-func (gp *GoPdf) AddTTFFont(family string, ttfpath string) error {
+func (gp *HPdf) AddTTFFont(family string, ttfpath string) error {
 	return gp.AddTTFFontWithOption(family, ttfpath, defaultTtfFontOption())
 }
 
 // KernOverride override kern value
-func (gp *GoPdf) KernOverride(family string, fn FuncKernOverride) error {
+func (gp *HPdf) KernOverride(family string, fn FuncKernOverride) error {
 	i := 0
 	max := len(gp.pdfObjs)
 	for i < max {
@@ -1771,7 +1771,7 @@ func (gp *GoPdf) KernOverride(family string, fn FuncKernOverride) error {
 }
 
 // SetTextColor :  function sets the text color
-func (gp *GoPdf) SetTextColor(r uint8, g uint8, b uint8) {
+func (gp *HPdf) SetTextColor(r uint8, g uint8, b uint8) {
 	gp.curr.txtColorMode = "color"
 	rgb := cacheContentTextColorRGB{
 		r: r,
@@ -1781,7 +1781,7 @@ func (gp *GoPdf) SetTextColor(r uint8, g uint8, b uint8) {
 	gp.curr.setTextColor(rgb)
 }
 
-func (gp *GoPdf) SetTextColorCMYK(c, m, y, k uint8) {
+func (gp *HPdf) SetTextColorCMYK(c, m, y, k uint8) {
 	gp.curr.txtColorMode = "color"
 	cmyk := cacheContentTextColorCMYK{
 		c: c,
@@ -1793,27 +1793,27 @@ func (gp *GoPdf) SetTextColorCMYK(c, m, y, k uint8) {
 }
 
 // SetStrokeColor set the color for the stroke
-func (gp *GoPdf) SetStrokeColor(r uint8, g uint8, b uint8) {
+func (gp *HPdf) SetStrokeColor(r uint8, g uint8, b uint8) {
 	gp.getContent().AppendStreamSetColorStroke(r, g, b)
 }
 
 // SetFillColor set the color for the stroke
-func (gp *GoPdf) SetFillColor(r uint8, g uint8, b uint8) {
+func (gp *HPdf) SetFillColor(r uint8, g uint8, b uint8) {
 	gp.getContent().AppendStreamSetColorFill(r, g, b)
 }
 
 // SetStrokeColorCMYK set the color for the stroke in CMYK color mode
-func (gp *GoPdf) SetStrokeColorCMYK(c, m, y, k uint8) {
+func (gp *HPdf) SetStrokeColorCMYK(c, m, y, k uint8) {
 	gp.getContent().AppendStreamSetColorStrokeCMYK(c, m, y, k)
 }
 
 // SetFillColorCMYK set the color for the fill in CMYK color mode
-func (gp *GoPdf) SetFillColorCMYK(c, m, y, k uint8) {
+func (gp *HPdf) SetFillColorCMYK(c, m, y, k uint8) {
 	gp.getContent().AppendStreamSetColorFillCMYK(c, m, y, k)
 }
 
 // MeasureTextWidth : measure Width of text (use current font)
-func (gp *GoPdf) MeasureTextWidth(text string) (float64, error) {
+func (gp *HPdf) MeasureTextWidth(text string) (float64, error) {
 
 	text, err := gp.curr.FontISubset.AddChars(text) //AddChars for create CharacterToGlyphIndex
 	if err != nil {
@@ -1828,7 +1828,7 @@ func (gp *GoPdf) MeasureTextWidth(text string) (float64, error) {
 }
 
 // MeasureCellHeightByText : measure Height of cell by text (use current font)
-func (gp *GoPdf) MeasureCellHeightByText(text string) (float64, error) {
+func (gp *HPdf) MeasureCellHeightByText(text string) (float64, error) {
 
 	text, err := gp.curr.FontISubset.AddChars(text) //AddChars for create CharacterToGlyphIndex
 	if err != nil {
@@ -1849,39 +1849,39 @@ func (gp *GoPdf) MeasureCellHeightByText(text string) (float64, error) {
 // - x2, y2: Control point 2
 // - x3, y3: End point
 // - style: Style of rectangule (draw and/or fill: D, F, DF, FD)
-func (gp *GoPdf) Curve(x0 float64, y0 float64, x1 float64, y1 float64, x2 float64, y2 float64, x3 float64, y3 float64, style string) {
+func (gp *HPdf) Curve(x0 float64, y0 float64, x1 float64, y1 float64, x2 float64, y2 float64, x3 float64, y3 float64, style string) {
 	gp.UnitsToPointsVar(&x0, &y0, &x1, &y1, &x2, &y2, &x3, &y3)
 	gp.getContent().AppendStreamCurve(x0, y0, x1, y1, x2, y2, x3, y3, style)
 }
 
 /*
 //SetProtection set permissions as well as user and owner passwords
-func (gp *GoPdf) SetProtection(permissions int, userPass []byte, ownerPass []byte) {
+func (gp *HPdf) SetProtection(permissions int, userPass []byte, ownerPass []byte) {
 	gp.pdfProtection = new(PDFProtection)
 	gp.pdfProtection.setProtection(permissions, userPass, ownerPass)
 }*/
 
 // SetInfo set Document Information Dictionary
-func (gp *GoPdf) SetInfo(info PdfInfo) {
+func (gp *HPdf) SetInfo(info PdfInfo) {
 	gp.info = &info
 	gp.isUseInfo = true
 }
 
 // GetInfo get Document Information Dictionary
-func (gp *GoPdf) GetInfo() PdfInfo {
+func (gp *HPdf) GetInfo() PdfInfo {
 	return *gp.info
 }
 
 // Rotate rotate text or image
 // angle is angle in degrees.
 // x, y is rotation center
-func (gp *GoPdf) Rotate(angle, x, y float64) {
+func (gp *HPdf) Rotate(angle, x, y float64) {
 	gp.UnitsToPointsVar(&x, &y)
 	gp.getContent().appendRotate(angle, x, y)
 }
 
 // RotateReset reset rotate
-func (gp *GoPdf) RotateReset() {
+func (gp *HPdf) RotateReset() {
 	gp.getContent().appendRotateReset()
 }
 
@@ -1896,8 +1896,8 @@ func (gp *GoPdf) RotateReset() {
 //	 pdf.SetStrokeColor(255, 0, 0)
 //		pdf.SetLineWidth(2)
 //		pdf.SetFillColor(0, 255, 0)
-//		pdf.Polygon([]gopdf.Point{{X: 10, Y: 30}, {X: 585, Y: 200}, {X: 585, Y: 250}}, "DF")
-func (gp *GoPdf) Polygon(points []Point, style string) {
+//		pdf.Polygon([]hpdf.Point{{X: 10, Y: 30}, {X: 585, Y: 200}, {X: 585, Y: 250}}, "DF")
+func (gp *HPdf) Polygon(points []Point, style string) {
 
 	transparency, err := gp.getCachedTransparency(nil)
 	if err != nil {
@@ -1931,7 +1931,7 @@ func (gp *GoPdf) Polygon(points []Point, style string) {
 //		pdf.SetLineWidth(2)
 //		pdf.SetFillColor(0, 255, 0)
 //		pdf.Rectangle(196.6, 336.8, 398.3, 379.3, "DF", 3, 10)
-func (gp *GoPdf) Rectangle(x0 float64, y0 float64, x1 float64, y1 float64, style string, radius float64, radiusPointNum int) error {
+func (gp *HPdf) Rectangle(x0 float64, y0 float64, x1 float64, y1 float64, style string, radius float64, radiusPointNum int) error {
 	if x1 <= x0 || y1 <= y0 {
 		return ErrInvalidRectangleCoordinates
 	}
@@ -2014,7 +2014,7 @@ func (gp *GoPdf) Rectangle(x0 float64, y0 float64, x1 float64, y1 float64, style
 /*---private---*/
 
 // init
-func (gp *GoPdf) init(importer ...*gofpdi.Importer) {
+func (gp *HPdf) init(importer ...*gofpdi.Importer) {
 	gp.pdfObjs = []IObj{}
 	gp.buf = bytes.Buffer{}
 	gp.indexEncodingObjFonts = []int{}
@@ -2073,36 +2073,36 @@ func importerOrDefault(importer ...*gofpdi.Importer) *gofpdi.Importer {
 	return gofpdi.NewImporter()
 }
 
-func (gp *GoPdf) resetCurrXY() {
+func (gp *HPdf) resetCurrXY() {
 	gp.curr.X = gp.margins.Left
 	gp.curr.Y = gp.margins.Top
 }
 
 // UnitsToPoints converts the units to the documents unit type
-func (gp *GoPdf) UnitsToPoints(u float64) float64 {
+func (gp *HPdf) UnitsToPoints(u float64) float64 {
 	return unitsToPoints(gp.config, u)
 }
 
 // UnitsToPointsVar converts the units to the documents unit type for all variables passed in
-func (gp *GoPdf) UnitsToPointsVar(u ...*float64) {
+func (gp *HPdf) UnitsToPointsVar(u ...*float64) {
 	unitsToPointsVar(gp.config, u...)
 }
 
 // PointsToUnits converts the points to the documents unit type
-func (gp *GoPdf) PointsToUnits(u float64) float64 {
+func (gp *HPdf) PointsToUnits(u float64) float64 {
 	return pointsToUnits(gp.config, u)
 }
 
 // PointsToUnitsVar converts the points to the documents unit type for all variables passed in
-func (gp *GoPdf) PointsToUnitsVar(u ...*float64) {
+func (gp *HPdf) PointsToUnitsVar(u ...*float64) {
 	pointsToUnitsVar(gp.config, u...)
 }
 
-func (gp *GoPdf) isUseProtection() bool {
+func (gp *HPdf) isUseProtection() bool {
 	return gp.config.Protection.UseProtection
 }
 
-func (gp *GoPdf) createProtection() *PDFProtection {
+func (gp *HPdf) createProtection() *PDFProtection {
 	var prot PDFProtection
 	prot.setProtection(
 		gp.config.Protection.Permissions,
@@ -2112,11 +2112,11 @@ func (gp *GoPdf) createProtection() *PDFProtection {
 	return &prot
 }
 
-func (gp *GoPdf) protection() *PDFProtection {
+func (gp *HPdf) protection() *PDFProtection {
 	return gp.pdfProtection
 }
 
-func (gp *GoPdf) prepare() {
+func (gp *HPdf) prepare() {
 
 	if gp.isUseProtection() {
 		encObj := gp.pdfProtection.encryptionObj()
@@ -2167,7 +2167,7 @@ func (gp *GoPdf) prepare() {
 	}
 }
 
-func (gp *GoPdf) xref(w io.Writer, xrefbyteoffset int64, linelens []int64, i int) error {
+func (gp *HPdf) xref(w io.Writer, xrefbyteoffset int64, linelens []int64, i int) error {
 
 	io.WriteString(w, "xref\n")
 	fmt.Fprintf(w, "0 %d\n", i+1)
@@ -2198,7 +2198,7 @@ func (gp *GoPdf) xref(w io.Writer, xrefbyteoffset int64, linelens []int64, i int
 	return nil
 }
 
-func (gp *GoPdf) writeInfo(w io.Writer) {
+func (gp *HPdf) writeInfo(w io.Writer) {
 	var zerotime time.Time
 	io.WriteString(w, "/Info <<\n")
 
@@ -2230,7 +2230,7 @@ func (gp *GoPdf) writeInfo(w io.Writer) {
 }
 
 // ปรับ xref ให้เป็น 10 หลัก
-func (gp *GoPdf) formatXrefline(n int64) string {
+func (gp *HPdf) formatXrefline(n int64) string {
 	str := strconv.FormatInt(n, 10)
 	for len(str) < 10 {
 		str = "0" + str
@@ -2238,17 +2238,17 @@ func (gp *GoPdf) formatXrefline(n int64) string {
 	return str
 }
 
-func (gp *GoPdf) addObj(iobj IObj) int {
+func (gp *HPdf) addObj(iobj IObj) int {
 	index := len(gp.pdfObjs)
 	gp.pdfObjs = append(gp.pdfObjs, iobj)
 	return index
 }
 
-func (gp *GoPdf) getContent() *ContentObj {
+func (gp *HPdf) getContent() *ContentObj {
 	var content *ContentObj
 	if gp.indexOfContent <= -1 {
 		content = new(ContentObj)
-		content.init(func() *GoPdf {
+		content.init(func() *HPdf {
 			return gp
 		})
 		gp.indexOfContent = gp.addObj(content)
@@ -2281,7 +2281,7 @@ func infodate(t time.Time) string {
 //
 //	Normal, Multiply, Screen, Overlay, Darken, Lighten, ColorDodge, ColorBurn,
 //	HardLight, SoftLight, Difference, Exclusion, Hue, Saturation, Color, Luminosity
-func (gp *GoPdf) SetTransparency(transparency Transparency) error {
+func (gp *HPdf) SetTransparency(transparency Transparency) error {
 	t, err := gp.saveTransparency(&transparency)
 	if err != nil {
 		return err
@@ -2292,11 +2292,11 @@ func (gp *GoPdf) SetTransparency(transparency Transparency) error {
 	return nil
 }
 
-func (gp *GoPdf) ClearTransparency() {
+func (gp *HPdf) ClearTransparency() {
 	gp.curr.transparency = nil
 }
 
-func (gp *GoPdf) getCachedTransparency(transparency *Transparency) (*Transparency, error) {
+func (gp *HPdf) getCachedTransparency(transparency *Transparency) (*Transparency, error) {
 	if transparency == nil {
 		transparency = gp.curr.transparency
 	} else {
@@ -2311,7 +2311,7 @@ func (gp *GoPdf) getCachedTransparency(transparency *Transparency) (*Transparenc
 	return transparency, nil
 }
 
-func (gp *GoPdf) saveTransparency(transparency *Transparency) (*Transparency, error) {
+func (gp *HPdf) saveTransparency(transparency *Transparency) (*Transparency, error) {
 	cached, ok := gp.curr.transparencyMap.Find(*transparency)
 	if ok {
 		return &cached, nil
@@ -2340,7 +2340,7 @@ func (gp *GoPdf) saveTransparency(transparency *Transparency) (*Transparency, er
 
 // IsCurrFontContainGlyph defines is current font contains to a glyph
 // r:           any rune
-func (gp *GoPdf) IsCurrFontContainGlyph(r rune) (bool, error) {
+func (gp *HPdf) IsCurrFontContainGlyph(r rune) (bool, error) {
 	fontISubset := gp.curr.FontISubset
 	if fontISubset == nil {
 		return false, nil

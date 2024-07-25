@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ type CatalogObj struct { //impl IObj
 	outlinesObjID int
 }
 
-func (c *CatalogObj) init(funcGetRoot func() *GoPdf) {
+func (c *CatalogObj) init(funcGetRoot func() *HPdf) {
 	c.outlinesObjID = -1
 
 }

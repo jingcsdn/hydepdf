@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 // Left left
 const Left = 8 //001000

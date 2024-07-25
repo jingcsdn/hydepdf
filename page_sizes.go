@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 // PageSizeLetter page format
 var PageSizeLetter = &Rect{W: 612, H: 792, unitOverride: defaultUnitConfig{Unit: UnitPT}}

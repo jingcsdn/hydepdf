@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -8,10 +8,10 @@ import (
 // DeviceRGBObj  DeviceRGB
 type DeviceRGBObj struct {
 	data    []byte
-	getRoot func() *GoPdf
+	getRoot func() *HPdf
 }
 
-func (d *DeviceRGBObj) init(funcGetRoot func() *GoPdf) {
+func (d *DeviceRGBObj) init(funcGetRoot func() *HPdf) {
 	d.getRoot = funcGetRoot
 }
 

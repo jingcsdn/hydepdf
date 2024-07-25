@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 // TtfOption  font option
 type TtfOption struct {

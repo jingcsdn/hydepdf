@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 type Box struct {
 	Left, Top, Right, Bottom float64

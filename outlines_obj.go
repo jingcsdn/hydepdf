@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 
 // OutlinesObj : outlines dictionary
 type OutlinesObj struct { //impl IObj
-	getRoot func() *GoPdf
+	getRoot func() *HPdf
 
 	index   int
 	first   int
@@ -16,7 +16,7 @@ type OutlinesObj struct { //impl IObj
 	lastObj *OutlineObj
 }
 
-func (o *OutlinesObj) init(funcGetRoot func() *GoPdf) {
+func (o *OutlinesObj) init(funcGetRoot func() *HPdf) {
 	o.getRoot = funcGetRoot
 	o.first = -1
 	o.last = -1
@@ -98,7 +98,7 @@ type OutlineObj struct { //impl IObj
 	height float64
 }
 
-func (o *OutlineObj) init(funcGetRoot func() *GoPdf) {
+func (o *OutlineObj) init(funcGetRoot func() *HPdf) {
 }
 
 func (o *OutlineObj) SetFirst(first int) {

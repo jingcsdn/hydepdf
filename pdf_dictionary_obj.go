@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"compress/zlib"
@@ -7,7 +7,7 @@ import (
 	"io"
 	"sort"
 
-	"github.com/signintech/gopdf/fontmaker/core"
+	"github.com/signintech/hpdf/fontmaker/core"
 )
 
 // EntrySelectors entry selectors
@@ -25,11 +25,11 @@ var ErrNotSupportShortIndexYet = errors.New("not support none short index yet")
 // PdfDictionaryObj pdf dictionary object
 type PdfDictionaryObj struct {
 	PtrToSubsetFontObj *SubsetFontObj
-	//getRoot            func() *GoPdf
+	//getRoot            func() *HPdf
 	pdfProtection *PDFProtection
 }
 
-func (p *PdfDictionaryObj) init(funcGetRoot func() *GoPdf) {
+func (p *PdfDictionaryObj) init(funcGetRoot func() *HPdf) {
 	//p.getRoot = funcGetRoot
 }
 

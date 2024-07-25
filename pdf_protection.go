@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"crypto/md5"

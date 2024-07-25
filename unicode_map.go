@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -8,11 +8,11 @@ import (
 // UnicodeMap unicode map
 type UnicodeMap struct {
 	PtrToSubsetFontObj *SubsetFontObj
-	//getRoot            func() *GoPdf
+	//getRoot            func() *HPdf
 	pdfProtection *PDFProtection
 }
 
-func (u *UnicodeMap) init(funcGetRoot func() *GoPdf) {
+func (u *UnicodeMap) init(funcGetRoot func() *HPdf) {
 	//u.getRoot = funcGetRoot
 }
 

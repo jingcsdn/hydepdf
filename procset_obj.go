@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -12,10 +12,10 @@ type ProcSetObj struct {
 	RelateXobjs         RelateXobjects
 	ExtGStates          []ExtGS
 	ImportedTemplateIds map[string]int
-	getRoot             func() *GoPdf
+	getRoot             func() *HPdf
 }
 
-func (pr *ProcSetObj) init(funcGetRoot func() *GoPdf) {
+func (pr *ProcSetObj) init(funcGetRoot func() *HPdf) {
 	pr.getRoot = funcGetRoot
 	pr.ImportedTemplateIds = make(map[string]int, 0)
 	pr.ExtGStates = make([]ExtGS, 0)

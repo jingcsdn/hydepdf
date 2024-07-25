@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 type PaintStyle string
 

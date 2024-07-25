@@ -6,19 +6,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/signintech/gopdf"
+	"github.com/signintech/hpdf"
 )
 
 func TestPageWithImage(t *testing.T) {
 	var err error
-	pdf := &gopdf.GoPdf{}
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf := &hpdf.HPdf{}
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	pdf.SetMargins(0, 20, 0, 10)
 	pdf.AddPage()
 
 	var x float64 = 100
 	var y float64 = 20
-	imgRect := &gopdf.Rect{
+	imgRect := &hpdf.Rect{
 		W: 354 * 72 / 120,
 		H: 241 * 72 / 120,
 	}

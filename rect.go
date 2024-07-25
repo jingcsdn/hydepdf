@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 // Rect defines a rectangle.
 type Rect struct {

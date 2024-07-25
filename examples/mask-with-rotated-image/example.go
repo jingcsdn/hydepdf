@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/signintech/gopdf"
+	"github.com/signintech/hpdf"
 )
 
 var resourcesPath string
@@ -19,9 +19,9 @@ func init() {
 }
 
 func main() {
-	pdf := gopdf.GoPdf{}
+	pdf := hpdf.HPdf{}
 
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	pdf.AddPage()
 
 	if err := pdf.AddTTFFont("loma", resourcesPath+"/LiberationSerif-Regular.ttf"); err != nil {
@@ -37,25 +37,25 @@ func main() {
 		log.Panic(err.Error())
 	}
 
-	chili, err := gopdf.ImageHolderByReader(file)
+	chili, err := hpdf.ImageHolderByReader(file)
 	if err != nil {
 		log.Panic(err.Error())
 	}
 
-	if err := pdf.ImageByHolderWithOptions(chili, gopdf.ImageOptions{
+	if err := pdf.ImageByHolderWithOptions(chili, hpdf.ImageOptions{
 		X:    100,
 		Y:    100,
-		Rect: &gopdf.Rect{W: 200, H: 200},
+		Rect: &hpdf.Rect{W: 200, H: 200},
 	}); err != nil {
 		log.Panic(err.Error())
 	}
 
 	//When the image is rotated 90 degrees, the ratio of the image changes.
-	if err := pdf.ImageByHolderWithOptions(chili, gopdf.ImageOptions{
+	if err := pdf.ImageByHolderWithOptions(chili, hpdf.ImageOptions{
 		DegreeAngle: 90,
 		X:           200,
 		Y:           400,
-		Rect:        &gopdf.Rect{W: 200, H: 200},
+		Rect:        &hpdf.Rect{W: 200, H: 200},
 	}); err != nil {
 		log.Panic(err.Error())
 	}

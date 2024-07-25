@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"bytes"
@@ -17,7 +17,7 @@ func BenchmarkPdfWithImageHolder(b *testing.B) {
 		return
 	}
 
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4})
 	pdf.AddPage()
 	err = pdf.AddTTFFont("LiberationSerif-Regular", "./test/res/LiberationSerif-Regular.ttf")
@@ -217,7 +217,7 @@ func BenchmarkAddTTFFontByReader(b *testing.B) {
 	}
 
 	for n := 0; n < b.N; n++ {
-		pdf := &GoPdf{}
+		pdf := &HPdf{}
 		pdf.Start(Config{PageSize: *PageSizeA4})
 		if err := pdf.AddTTFFontByReader("LiberationSerif-Regular", bytes.NewReader(fontData)); err != nil {
 			return
@@ -260,7 +260,7 @@ func BenchmarkAddTTFFontData(b *testing.B) {
 	}
 
 	for n := 0; n < b.N; n++ {
-		pdf := &GoPdf{}
+		pdf := &HPdf{}
 		pdf.Start(Config{PageSize: *PageSizeA4})
 		if err := pdf.AddTTFFontData("LiberationSerif-Regular", fontData); err != nil {
 			return
@@ -282,7 +282,7 @@ func TestReuseFontData(t *testing.T) {
 		return
 	}
 
-	pdf1 := &GoPdf{}
+	pdf1 := &HPdf{}
 	rst1, err := generatePDFBytesByAddTTFFontData(pdf1, fontData)
 	if err != nil {
 		t.Error(err)
@@ -290,7 +290,7 @@ func TestReuseFontData(t *testing.T) {
 	}
 
 	// Reuse the parsed font data.
-	pdf2 := &GoPdf{}
+	pdf2 := &HPdf{}
 	rst2, err := generatePDFBytesByAddTTFFontData(pdf2, fontData)
 	if err != nil {
 		t.Error(err)
@@ -324,7 +324,7 @@ func writeFile(name string, data []byte, perm os.FileMode) error {
 	return err
 }
 
-func generatePDFBytesByAddTTFFontData(pdf *GoPdf, fontData []byte) ([]byte, error) {
+func generatePDFBytesByAddTTFFontData(pdf *HPdf, fontData []byte) ([]byte, error) {
 	pdf.Start(Config{PageSize: *PageSizeA4})
 	if pdf.GetNumberOfPages() != 0 {
 		return nil, errors.New("Invalid starting number of pages, should be 0")
@@ -353,7 +353,7 @@ func TestWhiteTransparent(t *testing.T) {
 		return
 	}
 	// create pdf.
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4})
 	pdf.AddPage()
 
@@ -414,7 +414,7 @@ func TestRectangle(t *testing.T) {
 		return
 	}
 	// create pdf.
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4})
 	pdf.AddPage()
 
@@ -459,12 +459,12 @@ func TestWhiteTransparent195(t *testing.T) {
 		return
 	}
 	// create pdf.
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4})
 	pdf.AddPage()
 
 	var glyphNotFoundOfLiberationSerif []rune
-	//err = pdf.AddTTFFontWithOption("LiberationSerif-Regular", "/Users/oneplus/Code/Work/gopdf_old/test/res/Meera-Regular.ttf", TtfOption{
+	//err = pdf.AddTTFFontWithOption("LiberationSerif-Regular", "/Users/oneplus/Code/Work/hpdf_old/test/res/Meera-Regular.ttf", TtfOption{
 	err = pdf.AddTTFFontWithOption("LiberationSerif-Regular", "test/res/LiberationSerif-Regular.ttf", TtfOption{
 		OnGlyphNotFound: func(r rune) { //call when can not find glyph inside ttf file.
 			glyphNotFoundOfLiberationSerif = append(glyphNotFoundOfLiberationSerif, r)
@@ -524,7 +524,7 @@ func TestClearValue(t *testing.T) {
 		return
 	}
 
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4, Protection: PDFProtectionConfig{
 		UseProtection: true,
 		OwnerPass:     []byte("123456"),
@@ -571,7 +571,7 @@ func TestClearValue(t *testing.T) {
 	//reset
 	pdf.Start(Config{PageSize: *PageSizeA4})
 
-	pdf2 := GoPdf{}
+	pdf2 := HPdf{}
 	pdf2.Start(Config{PageSize: *PageSizeA4})
 
 	//check
@@ -702,7 +702,7 @@ func TestTextColor(t *testing.T) {
 	}
 
 	// create pdf.
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4})
 	pdf.AddPage()
 	err = pdf.AddTTFFont("LiberationSerif", "./test/res/LiberationSerif-Regular.ttf")
@@ -740,7 +740,7 @@ func TestAddHeaderFooter(t *testing.T) {
 	}
 
 	// create pdf.
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4})
 
 	err = pdf.AddTTFFont("LiberationSerif-Regular", "./test/res/LiberationSerif-Regular.ttf")
@@ -788,8 +788,8 @@ func initTesting() error {
 
 // setupDefaultA4PDF creates an A4 sized pdf with a plain configuration adding and setting the required fonts for
 // further processing. Tests will fail in case adding or setting the font fails.
-func setupDefaultA4PDF(t *testing.T) *GoPdf {
-	pdf := GoPdf{}
+func setupDefaultA4PDF(t *testing.T) *HPdf {
+	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4})
 	err := pdf.AddTTFFont("LiberationSerif-Regular", "./test/res/LiberationSerif-Regular.ttf")
 	if err != nil {

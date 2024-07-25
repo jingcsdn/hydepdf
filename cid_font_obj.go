@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ type CIDFontObj struct {
 	indexObjSubfontDescriptor int
 }
 
-func (ci *CIDFontObj) init(funcGetRoot func() *GoPdf) {
+func (ci *CIDFontObj) init(funcGetRoot func() *HPdf) {
 }
 
 // SetIndexObjSubfontDescriptor set  indexObjSubfontDescriptor

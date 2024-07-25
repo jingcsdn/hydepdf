@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -20,7 +20,7 @@ type FontObj struct {
 	CountOfFont int
 }
 
-func (f *FontObj) init(funcGetRoot func() *GoPdf) {
+func (f *FontObj) init(funcGetRoot func() *HPdf) {
 	f.IsEmbedFont = false
 	//me.CountOfFont = -1
 }

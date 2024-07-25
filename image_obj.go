@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"bytes"
@@ -23,10 +23,10 @@ type ImageObj struct {
 	rawImgReader  *bytes.Reader
 	imginfo       imgInfo
 	pdfProtection *PDFProtection
-	//getRoot func() *GoPdf
+	//getRoot func() *HPdf
 }
 
-func (i *ImageObj) init(funcGetRoot func() *GoPdf) {
+func (i *ImageObj) init(funcGetRoot func() *HPdf) {
 
 }
 

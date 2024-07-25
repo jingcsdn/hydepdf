@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ func TestPlaceHolderText(t *testing.T) {
 		return
 	}
 
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4})
 	err = pdf.AddTTFFont("LiberationSerif-Regular", "./test/res/LiberationSerif-Regular.ttf")
 	if err != nil {
@@ -66,7 +66,7 @@ func TestPlaceHolderText2(t *testing.T) {
 		return
 	}
 
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{PageSize: *PageSizeA4})
 	err = pdf.AddTTFFont("LiberationSerif-Regular", "./test/res/LiberationSerif-Regular.ttf")
 	if err != nil {

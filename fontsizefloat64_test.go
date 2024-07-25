@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ func TestContentObjCalTextHeight(t *testing.T) {
 func TestSetFontCheckGetX(t *testing.T) {
 	prefix := "Afont"
 	font := "test/res/LiberationSerif-Regular.ttf"
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{Unit: UnitPT, PageSize: *PageSizeA4})
 	pdf.AddPage()
 	if err := pdf.AddTTFFontWithOption(prefix, font, TtfOption{UseKerning: true}); err != nil {
@@ -50,15 +50,15 @@ func TestSetFontCheckGetX(t *testing.T) {
 	}
 }
 
-func moveAndAdd(pdf *GoPdf, prefix string) (float64, float64) {
+func moveAndAdd(pdf *HPdf, prefix string) (float64, float64) {
 	pdf.SetXY(30.0, 30.0)
 	pdf.Text(prefix)
 	return pdf.GetX(), pdf.GetY()
 }
-func setup(t *testing.T) (string, *GoPdf, float64, float64) {
+func setup(t *testing.T) (string, *HPdf, float64, float64) {
 	prefix := "Afont"
 	font := "test/res/LiberationSerif-Regular.ttf"
-	pdf := GoPdf{}
+	pdf := HPdf{}
 	pdf.Start(Config{Unit: UnitPT, PageSize: *PageSizeA4})
 	pdf.AddPage()
 	if err := pdf.AddTTFFontWithOption(prefix, font, TtfOption{UseKerning: true}); err != nil {

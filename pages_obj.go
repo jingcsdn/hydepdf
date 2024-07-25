@@ -1,4 +1,4 @@
-package gopdf
+package hpdf
 
 import (
 	"fmt"
@@ -9,10 +9,10 @@ import (
 type PagesObj struct { //impl IObj
 	PageCount int
 	Kids      string
-	getRoot   func() *GoPdf
+	getRoot   func() *HPdf
 }
 
-func (p *PagesObj) init(funcGetRoot func() *GoPdf) {
+func (p *PagesObj) init(funcGetRoot func() *HPdf) {
 	p.PageCount = 0
 	p.getRoot = funcGetRoot
 }

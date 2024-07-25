@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/signintech/gopdf"
+	"github.com/signintech/hpdf"
 )
 
 var resourcesPath string
@@ -19,9 +19,9 @@ func init() {
 }
 
 func main() {
-	pdf := gopdf.GoPdf{}
+	pdf := hpdf.HPdf{}
 
-	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
+	pdf.Start(hpdf.Config{PageSize: *hpdf.PageSizeA4})
 	pdf.AddPage()
 
 	if err := pdf.AddTTFFont("loma", resourcesPath+"/LiberationSerif-Regular.ttf"); err != nil {
@@ -38,7 +38,7 @@ func main() {
 		log.Panic(err.Error())
 	}
 
-	imgH1, err := gopdf.ImageHolderByBytes(b)
+	imgH1, err := hpdf.ImageHolderByBytes(b)
 	if err != nil {
 		log.Panic(err.Error())
 	}
@@ -52,39 +52,39 @@ func main() {
 		log.Panic(err.Error())
 	}
 
-	imgH2, err := gopdf.ImageHolderByReader(file)
+	imgH2, err := hpdf.ImageHolderByReader(file)
 	if err != nil {
 		log.Panic(err.Error())
 	}
 
-	maskHolder, err := gopdf.ImageHolderByPath(resourcesPath + "/mask.png")
+	maskHolder, err := hpdf.ImageHolderByPath(resourcesPath + "/mask.png")
 	if err != nil {
 		log.Panic(err.Error())
 	}
 
-	maskOpts := gopdf.MaskOptions{
+	maskOpts := hpdf.MaskOptions{
 		Holder: maskHolder,
-		ImageOptions: gopdf.ImageOptions{
+		ImageOptions: hpdf.ImageOptions{
 			X: 0,
 			Y: 0,
-			Rect: &gopdf.Rect{
+			Rect: &hpdf.Rect{
 				W: 300,
 				H: 300,
 			},
 		},
 	}
 
-	transparency, err := gopdf.NewTransparency(0.5, "")
+	transparency, err := hpdf.NewTransparency(0.5, "")
 	if err != nil {
 		log.Panic(err.Error())
 	}
 
-	imOpts := gopdf.ImageOptions{
+	imOpts := hpdf.ImageOptions{
 		X:            0,
 		Y:            0,
 		Mask:         &maskOpts,
 		Transparency: &transparency,
-		Rect:         &gopdf.Rect{W: 400, H: 400},
+		Rect:         &hpdf.Rect{W: 400, H: 400},
 	}
 	if err := pdf.ImageByHolderWithOptions(imgH2, imOpts); err != nil {
 		log.Panic(err.Error())
